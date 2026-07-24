@@ -5,8 +5,6 @@ use crate::{
     TokenId,
     Royalty,
     Attribute,
-    Error,
-    DataKey,
 };
 
 /// A complete NFT mint object that contains all data needed to create an NFT
@@ -45,6 +43,7 @@ impl NftMintFactory {
         metadata_uri: String,
         royalty: Royalty,
         creator: Address,
+        collection: String,
     ) -> NftMint {
         NftMint {
             token_id,
@@ -60,7 +59,7 @@ impl NftMintFactory {
             is_soulbound: false,
             is_locked: false,
             creator,
-            collection: crate::ClipsNftContract::name(env.clone()),
+            collection,
             mint_timestamp: env.ledger().timestamp(),
             labels: Vec::new(env),
         }
@@ -81,11 +80,9 @@ impl NftMintFactory {
         external_url: Option<String>,
         attributes: Vec<Attribute>,
         is_soulbound: bool,
-        collection: Option<String>,
+        collection: String,
         labels: Vec<String>,
     ) -> NftMint {
-        let collection = collection.unwrap_or_else(|| crate::ClipsNftContract::name(env.clone()));
-        
         NftMint {
             token_id,
             owner,
